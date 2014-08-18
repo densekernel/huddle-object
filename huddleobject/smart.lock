@@ -1,0 +1,20 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "huddlecanvas": {}
+    },
+    "packages": {
+      "huddlecanvas": {
+        "git": "https://github.com/scarrobin/HuddleCanvas.git",
+        "tag": "v0.6.1",
+        "commit": "491f2a6424d20eabcab329b0877a363e1950cd84"
+      },
+      "huddle": {
+        "git": "https://github.com/raedle/meteor-huddle.git",
+        "tag": "v0.9.3-7",
+        "commit": "7abc9682810c5cd418c2f28a31c42b723468e55d"
+      }
+    }
+  }
+}
