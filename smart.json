@@ -3,11 +3,11 @@
     "description": "Add HTML div elements to HuddleCanvas with support for multi-touch gestures",
     "homepage": "https://github.com/jonnymanf/HuddleObject",
     "author": "Jonny Manfield, Oscar Robinson",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "git": "https://github.com/jonnymanf/HuddleObject.git",
     "packages": {
         "huddle": {},
-        "huddle-canvas": {}
+        "huddlecanvas": {}
     }
 
 }
