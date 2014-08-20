@@ -1,0 +1,15 @@
+/* Define general styles that all Huddle Objects will require */
+.huddle-object {
+	position: absolute !important;
+	z-index: 1001 !important;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.huddle-object img {
+	z-index: 999 !important;
+}
