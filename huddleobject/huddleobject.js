@@ -29,7 +29,6 @@ if (Meteor.isClient) {
         updateObjects();  
       }
       
-
       HuddleCanvas.panUnlock();
 
       /*
@@ -111,8 +110,7 @@ function setupEventListeners() {
        * Functions to manipulate objects
        */
 
-      objectScale(ev, target);
-      objectDrag(ev, target);
+      objectTransform(ev, target);
         
     });
 
@@ -175,6 +173,12 @@ function reloadObjects() {
     if(currentObject) {
       $('#' + id).css('top', currentObject.originTop + 'px');
       $('#' + id).css('left', currentObject.originLeft + 'px');
+      applyAllBrowsers(
+        '#' + id, 
+        'transform', 
+        'scale(' + currentObject.originScale + 
+        ') rotate(' + currentObject.originRotate + 'deg)'
+      );
     }
   }
 }
@@ -203,14 +207,15 @@ function updateObjects() {
   }
 }
 
-//$(document.getElementById("test-object-02")).css('transform', 'scale(2.0) rotate(10deg)');
-
 
 // Function to move object using two-finger drag gesture
-function objectDrag(ev, target) {
+function objectTransform(ev, target) {
 
-    console.log("## Drag Gesture" + target);
+    console.log("## Transform Gesture" + target);
     console.log(ev);
+
+    // Check if collection requires insertion of target element
+    insertObject(target);
 
     // Pause background panning
     HuddleCanvas.panLock();
@@ -222,29 +227,38 @@ function objectDrag(ev, target) {
     var dy = ev.deltaY;
     var objectOffsetX = (Math.cos(angle) * dx) - (Math.sin(angle) * dy);
     var objectOffsetY = (Math.sin(angle) * dx) + (Math.cos(angle) * dy);
+    var scale = (Math.round(ev.scale*10))/10;
+    var rotation = Math.round(ev.rotation);
+    var rotationFix;
 
-    // Check if collection requires insertion of target element
-    insertObject(target);
+    // Debug to visualise event data on tablet
+    HuddleCanvas.debugWrite(scale + " " + rotation);
 
     var currentObject = ObjectPosition.findOne({'id' : target});
+    console.log("## currentObject");
+    console.log(currentObject);  
 
     // Update collection values
     ObjectPosition.update(currentObject._id, {
       $set: {
           deltaTop: currentObject.originTop + objectOffsetY,
           deltaLeft: currentObject.originLeft + objectOffsetX,
+          deltaScale: currentObject.originScale * scale,
+          deltaRotate: currentObject.originRotate + rotation
       }
 
     });
 
     // Finalise collection values
-    if (ev.type === 'panend') {
-      HuddleCanvas.debugWrite('panend');
+    if (ev.type === 'panend' || ev.type === 'pinchend') {
+      HuddleCanvas.debugWrite(ev.type);
 
       ObjectPosition.update(currentObject._id, {
           $set: {
               originTop: currentObject.deltaTop,
-              originLeft: currentObject.deltaLeft
+              originLeft: currentObject.deltaLeft,
+              originScale: currentObject.deltaScale,
+              originRotate: currentObject.deltaRotate
           }
 
       });
@@ -252,44 +266,6 @@ function objectDrag(ev, target) {
 
     // debug: console ObjectPosition update
     console.log(ObjectPosition.find().fetch());
-
-}
-
-// Function to scale and rotate objects
-function objectScale(ev, target) {
-
-  console.log("## Scale Rotate Gesture " + target);
-  console.log(ev);
-
-  var scale = (Math.round(ev.scale*10))/10;
-  var rotation = Math.round(ev.rotation);
-
-  // Debug to visualise event data on tablet
-  HuddleCanvas.debugWrite(scale + " " + rotation);
-
-  var currentObject = ObjectPosition.findOne({'id': target});
-  console.log("## currentObject");
-  console.log(currentObject);  
-
-  ObjectPosition.update(currentObject._id, {
-      $set: {
-          deltaScale: currentObject.originScale * scale,
-          deltaRotate: currentObject.originRotate + rotation
-      }
-  });
-  
-  if (ev.type === 'pinchend') {
-     
-      ObjectPosition.update(currentObject._id, {
-          $set: {
-              originScale: currentObject.deltaScale,
-              originRotate: deltaRotate
-          }
-      });
-  }
-
-  // debug: console ObjectPosition update
-  console.log(ObjectPosition.find().fetch());
 
 }
 
