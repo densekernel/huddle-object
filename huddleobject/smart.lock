@@ -7,8 +7,8 @@
     "packages": {
       "huddlecanvas": {
         "git": "https://github.com/scarrobin/HuddleCanvas.git",
-        "tag": "v0.6.1",
-        "commit": "491f2a6424d20eabcab329b0877a363e1950cd84"
+        "tag": "v0.6.2",
+        "commit": "ea64592edc96cf728cb9980d0e82e87d15a321d7"
       },
       "huddle": {
         "git": "https://github.com/raedle/meteor-huddle.git",

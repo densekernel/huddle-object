@@ -1,1 +1,37 @@
 /* CSS declarations go here */
+
+
+/* Define starting styles for test Huddle Objects elements */
+#test-object-01 {
+	width: 100px;
+	height: 100px;
+	color: white;
+	background-color: black;
+	font-size: 14px;
+	font-weight: bold;
+	top: 200px;
+	left: 200px;
+}
+
+#test-object-02 {
+	width: 100px;
+	height: 100px;
+	color: white;
+	background-color: black;
+	font-size: 14px;
+	font-weight: bold;
+	top: 200px;
+	left: 400px;
+}
+
+/* Define general styles that all Huddle Objects will require */
+.huddle-object {
+	position: absolute !important;
+	z-index: 1001 !important;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
