@@ -45,14 +45,14 @@ var HuddleObject = (function() {
        */
 
       if(ObjectPosition.find().count() != 0) {
-        console.log("### ObjectPosition loaded");
-        console.log(ObjectPosition.find().fetch());
+        //console.log("### ObjectPosition loaded");
+        //console.log(ObjectPosition.find().fetch());
         objectCollectionLoaded = true;
         
       }
 
       if(objectCollectionLoaded === true && objectPositionLoaded === false) {
-        console.log("EXECUTE IF STATEMENT");
+        //console.log("EXECUTE IF STATEMENT");
         reloadObjects();
         objectPositionLoaded = true;
       }
@@ -63,14 +63,14 @@ var HuddleObject = (function() {
   // Setup event listeners for any element with class ".huddle-object"
   function setupEventListeners() {
 
-    console.log(DDP._allSubscriptionsReady());
+    //console.log(DDP._allSubscriptionsReady());
 
     var objectElements = document.getElementsByClassName("huddle-object");
     var objectEventListeners = [];
 
     // Check if meteor collection has loaded
-    console.log("### Object Position Collection");
-    console.log(ObjectPosition.find().fetch());
+    //console.log("### Object Position Collection");
+    //console.log(ObjectPosition.find().fetch());
 
 
     for (i = 0; i < objectElements.length; i++) {
@@ -83,9 +83,9 @@ var HuddleObject = (function() {
       objectEventListeners[i].on('panstart panmove panend pinchstart pinchmove pinchend', function(ev) {
 
         var target = ev.target.id;
-        console.log("### Hammer JS Event");
-        console.log("## Target Element " + target);
-        console.log(ev);
+        //console.log("### Hammer JS Event");
+        //console.log("## Target Element " + target);
+        //console.log(ev);
           
         /*
          * Functions to manipulate objects
@@ -96,8 +96,8 @@ var HuddleObject = (function() {
       });
 
       // debug: console Hammer JS Event listener
-      console.log("### HammerJS Event Listener");
-      console.log(objectEventListeners[i]);
+      //console.log("### HammerJS Event Listener");
+      //console.log(objectEventListeners[i]);
 
     }
 
@@ -114,7 +114,7 @@ var HuddleObject = (function() {
     var objectWidth = parseInt($('#' + target).css('width'));
     var objectHeight = parseInt($('#' + target).css('height'));
 
-    //console.log("# TOP: " + currentTop + " LEFT: " + currentLeft);
+    ////console.log("# TOP: " + currentTop + " LEFT: " + currentLeft);
 
 
 
@@ -135,22 +135,22 @@ var HuddleObject = (function() {
     // insert into ObjectPosition collection if not already there
     if(!ObjectPosition.findOne({'id' : target}) && target != "") {
       ObjectPosition.insert(objectData);
-      console.log("## Object inserted!");
-      console.log(ObjectPosition.findOne({'id': target}));  
+      //console.log("## Object inserted!");
+      //console.log(ObjectPosition.findOne({'id': target}));  
     }
   }
 
   // Reload objects using the most up-to-date data in ObjectPosition collection
   function reloadObjects() {
-    console.log(ObjectPosition.find().fetch());
+    //console.log(ObjectPosition.find().fetch());
     var objectElements = document.getElementsByClassName("huddle-object");
 
     for(var i = 0; i < objectElements.length; i++) {
 
       var id = objectElements[i].id;
       var currentObject = ObjectPosition.findOne({'id' : id});
-      console.log("### reloadObjects" + currentObject);
-      console.log(currentObject);
+      //console.log("### reloadObjects" + currentObject);
+      //console.log(currentObject);
 
       //getTransformValues(id);
 
@@ -175,8 +175,8 @@ var HuddleObject = (function() {
 
       var id = objectElements[i].id;
       var currentObject = ObjectPosition.findOne({'id' : id});
-      console.log("### updateObjects currentObject");
-      console.log(currentObject);
+      //console.log("### updateObjects currentObject");
+      //console.log(currentObject);
 
       if(currentObject) {
         $('#' + id).css('top', currentObject.deltaTop);
@@ -196,8 +196,8 @@ var HuddleObject = (function() {
   // Function to move object using two-finger drag gesture
   function objectTransform(ev, target) {
 
-      console.log("## Transform Gesture" + target);
-      console.log(ev);
+      //console.log("## Transform Gesture" + target);
+      //console.log(ev);
 
       // Check if collection requires insertion of target element
       insertObject(target);
@@ -220,8 +220,8 @@ var HuddleObject = (function() {
       HuddleCanvas.debugWrite(scale + " " + rotation);
 
       var currentObject = ObjectPosition.findOne({'id' : target});
-      console.log("## currentObject");
-      console.log(currentObject);  
+      //console.log("## currentObject");
+      //console.log(currentObject);  
 
       // Update collection values
       ObjectPosition.update(currentObject._id, {
@@ -250,7 +250,7 @@ var HuddleObject = (function() {
       }
 
       // debug: console ObjectPosition update
-      console.log(ObjectPosition.find().fetch());
+      //console.log(ObjectPosition.find().fetch());
 
   }
 
@@ -271,7 +271,7 @@ var HuddleObject = (function() {
 
   function getTransformValues(target) {
 
-    console.log("##### DEBUG TRANSFORM FUNCTION");
+    //console.log("##### DEBUG TRANSFORM FUNCTION");
 
     var el = document.getElementById(target);
     var st = window.getComputedStyle(el, null);
@@ -284,7 +284,7 @@ var HuddleObject = (function() {
 
     // With rotate(30deg)...
     // matrix(0.866025, 0.5, -0.5, 0.866025, 0px, 0px)
-    console.log('Matrix: ' + tr);
+    //console.log('Matrix: ' + tr);
 
     // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
 
@@ -305,8 +305,8 @@ var HuddleObject = (function() {
 
     // works!
     
-    console.log('Rotate: ' + angle + 'deg');
-    console.log('Scale: ' + scale);
+    //console.log('Rotate: ' + angle + 'deg');
+    //console.log('Scale: ' + scale);
   }
 
   /*
@@ -320,5 +320,5 @@ var HuddleObject = (function() {
 })();
 
 // Set HuddleObject to Global scope
-console.log("adding to window")
+//console.log("adding to window")
 window.HuddleObject = HuddleObject;
