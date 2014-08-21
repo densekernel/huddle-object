@@ -95,7 +95,122 @@ Now, if all three of the required packages are included in the Meteor project, t
 
 <b>n.b.</b> Version numbers of packages correct at time of writing.
 
-Adding objects to the canvas is no different to adding normal 
+Adding objects to the canvas is no different to adding HTML div elements to a webpage and styling them with CSS.
 
+<b>HuddleDocumentation.css</b>
+
+The CSS file needs to be updated with some <b>mandatory</b> and optional styles for any element we intend to add to the canvas.
+
+
+
+```css
+/* CSS declarations go here */
+
+#test-object {
+	width: 200px;
+	height: 200px;
+	top: 100px;
+	left: 100px;
+	background-color: yellow;
+	color: purple;
+}
+```
+
+In the example, the object we add will take the ID attribute "test-object".
+
+Some points to consider:
+
+- <b>top</b> A default top property must be defined, 0px is fine.
+- <b>left</b> A default left property must be defined, 0px is fine.
+- The rest of the CSS styles are optional!
+
+<b>HuddleDocumentation.html</b>
+
+The HTML file needs to be updated to include the mark-up for the Huddle Object element.
+
+```html
+<head>
+  <title>HuddleDocumentation</title>
+</head>
+
+<body>
+	<div id="huddle-canvas-container">
+		<div id="huddle-layer">
+			<div id="test-object" class="huddle-object">
+				<span>Hello world!</span>
+			</div>
+		</div>
+	</div>
+</body>
+```
+
+To add an object we simply create a nested ```<div></div>``` element within ```<div id="huddle-layer"></div>```
+
+Points to consider:
+
+- <b>ID attribute</b> All parent elements need to be given a unique ID attribute
+- <b>Class attribute</b> All parent elements need to be given the "huddle-object" class attribute
+
+<b>HuddleDocumentation.js</b>
+
+Finally, we need to update the JavaScript file to include a call to the HuddleObject API function which initialises the Huddle Objects.
+
+```javascript
+if (Meteor.isClient) {
+  var canvas = HuddleCanvas.create("huddle-orbiter.proxemicinteractions.org", 60000, "HuddleDocumentation", {
+    panningEnabled: true,
+    backgroundImage: "../../map.jpg",
+    showDebugBox: true,
+    layers: ["huddle-layer"]
+  });
+  
+  // code for HuddleObject inside window.onload function
+  window.onload = function() {
+    HuddleObject.initObjects();
+  }
+}
+
+if (Meteor.isServer) {
+  Meteor.startup(function () {
+    // code to run on server at startup
+  });
+}
+```
+
+The initObjects() call initialises a Meteor Collection to store information about Huddle Objects and sets up the HammerJS event listeners. Following this, a Deps.autorun() function is implemented that will automatically update Huddle Object's positions based on the transformations applied. This is synchronised across all the devices within the Huddle.
+
+Points to consider:
+
+- <b>window.onload</b> function is where to make calls to the HuddleObject API from
+
+<b>Summary</b>
+
+Well done! A Huddle Object should now successfully be added to the canvas. Gestures are automatically enabled, so if you have a tablet device available feel free to try them out. See the next section for more information on gestures.
+
+## Using HuddleObject - Gestures
+
+Huddle Objects currently support the following multi-touch gestures using HammerJS event listeners to capture information about the gesture.
+
+All transformations are applied through the objectTransform() function in the API.
+
+<b>One finger drag</b>
+
+Dragging a Huddle Object with one finger will move it about the canvas.
+
+<b>Two finger pinch</b>
+
+Pinching the item will scale it based on the increase or decrease in proximity of the two pointers.
+
+<b>Two finger rotate</b>
+
+With two fingers, a Huddle Object can also be rotated.
+
+## Using HuddleObject - Sessions
+
+When an object is first added to the canvas, it won't be added to the Meteor Collection until it is interacted with via touch gesture. Once inserted into the Meteor Collection, an up-to-date set of data regarding co-ordinates, orientation and scale are kept so upon reload, Huddle Objects will be in the same position that they were when last interacted with.
+
+They can be defaulted to their CSS properties by running the following command in terminal:
+
+`$ meteor reset`
 
 
