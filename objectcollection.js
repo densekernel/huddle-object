@@ -11,5 +11,12 @@ var HuddleObjectCollection = (function() {
 })();
 
 if (Meteor.isClient) {
+    Meteor.subscribe('objectPosition');
     window.HuddleObjectCollection = HuddleObjectCollection;
+}
+
+if (Meteor.isServer) {
+	Meteor.publish('objectPosition', function() {
+		return ObjectPosition.find();
+	})
 }
