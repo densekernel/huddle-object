@@ -206,7 +206,7 @@ var HuddleObject = (function() {
       HuddleCanvas.panLock();
 
       // Get data from Hammer JS event
-      var currentAngle = HuddleCanvas.getHuddleData().Orientation;
+      var currentAngle = -HuddleCanvas.getTotalRotation();
       var angle = currentAngle * Math.PI / 180.0;
       var dx = ev.deltaX;
       var dy = ev.deltaY;
