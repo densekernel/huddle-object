@@ -192,6 +192,7 @@ var HuddleObject = (function() {
     }
   }
 
+  previousRotation = 0;
 
   // Function to move object using two-finger drag gesture
   function objectTransform(ev, target) {
@@ -213,8 +214,8 @@ var HuddleObject = (function() {
       var objectOffsetX = (Math.cos(angle) * dx) - (Math.sin(angle) * dy);
       var objectOffsetY = (Math.sin(angle) * dx) + (Math.cos(angle) * dy);
       var scale = (Math.round(ev.scale*10))/10;
-      var rotation = Math.round(ev.rotation);
-      var rotationFix;
+      var eventRotation = Math.round(ev.rotation);
+      rotation = previousRotation;
 
       // Debug to visualise event data on tablet
       HuddleCanvas.debugWrite(scale + " " + rotation);
@@ -222,6 +223,15 @@ var HuddleObject = (function() {
       var currentObject = ObjectPosition.findOne({'id' : target});
       //console.log("## currentObject");
       //console.log(currentObject);  
+
+      // Include code to fix '180 bug'
+      if(ev.rotation) {
+        if ((!(Math.abs(previousRotation - eventRotation) > 10)) || Math.abs(eventRotation) < 10 || (!(Math.abs(Math.abs(previousRotation) - Math.abs(eventRotation)) > 10))) {
+            rotation = eventRotation;
+            previousRotation = rotation;
+            //canvas.debugAppend(ev.isFirst);
+        }
+      }
 
       // Update collection values
       ObjectPosition.update(currentObject._id, {
