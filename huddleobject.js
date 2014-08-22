@@ -10,7 +10,8 @@ var HuddleObject = (function() {
   var objectCollectionLoaded = false;
   var objectPositionLoaded = false;
   var minScale = 0.5;
-
+  var startRotation = 0;
+  var rotation;
 
   /*
    * API functions
@@ -225,12 +226,14 @@ var HuddleObject = (function() {
       //console.log(currentObject);  
 
       // Include code to fix '180 bug'
-      if(ev.rotation) {
-        if ((!(Math.abs(previousRotation - eventRotation) > 10)) || Math.abs(eventRotation) < 10 || (!(Math.abs(Math.abs(previousRotation) - Math.abs(eventRotation)) > 10))) {
-            rotation = eventRotation;
-            previousRotation = rotation;
-            //canvas.debugAppend(ev.isFirst);
-        }
+      if  ( (!(Math.abs(startRotation - eventRotation) > 10)) ||
+            Math.abs(eventRotation) < 10 || 
+            (!(Math.abs(Math.abs(startRotation) - Math.abs(eventRotation)) > 10))
+          ) {
+        rotation = eventRotation;
+        startRotation = rotation;
+        HuddleCanvas.debugAppend(rotation + startRotation);
+        console.log("update rotation: " + rotation + ev.rotation);
       }
 
       // Update collection values
