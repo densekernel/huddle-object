@@ -9,9 +9,10 @@ var HuddleObject = (function() {
 
   var objectCollectionLoaded = false;
   var objectPositionLoaded = false;
-  var minScale = 0.5;
+  var minScale = 0.7;
   var startRotation = 0;
   var rotation;
+  var previousRotation = 0;
 
   /*
    * API functions
@@ -130,7 +131,7 @@ var HuddleObject = (function() {
       "deltaScale" : 1.0,
       "originRotate" : 0,
       "deltaRotate" : 0,
-
+      "noAction" : false
     };
     
     // insert into ObjectPosition collection if not already there
@@ -193,8 +194,6 @@ var HuddleObject = (function() {
     }
   }
 
-  previousRotation = 0;
-
   // Function to move object using two-finger drag gesture
   function objectTransform(ev, target) {
 
@@ -205,7 +204,11 @@ var HuddleObject = (function() {
       insertObject(target);
 
       // Pause background panning
-      HuddleCanvas.panLock();
+      if($("#"+target).hasClass("can-drag") ||
+         $("#"+target).hasClass("can-scale") ||
+         $("#"+target).hasClass("can-rotate")) {
+          HuddleCanvas.panLock();
+      }
 
       // Get data from Hammer JS event
       var currentAngle = -HuddleCanvas.getTotalRotation();
@@ -218,22 +221,33 @@ var HuddleObject = (function() {
       var eventRotation = Math.round(ev.rotation);
       rotation = previousRotation;
 
-      // Debug to visualise event data on tablet
-      HuddleCanvas.debugWrite(scale + " " + rotation);
 
       var currentObject = ObjectPosition.findOne({'id' : target});
-      //console.log("## currentObject");
-      //console.log(currentObject);  
 
-      // Include code to fix '180 bug'
+      // 180 flip bug fix
       if  ( (!(Math.abs(startRotation - eventRotation) > 10)) ||
             Math.abs(eventRotation) < 10 || 
             (!(Math.abs(Math.abs(startRotation) - Math.abs(eventRotation)) > 10))
           ) {
         rotation = eventRotation;
         startRotation = rotation;
-        HuddleCanvas.debugAppend(rotation + startRotation);
-        console.log("update rotation: " + rotation + ev.rotation);
+
+      }
+
+      /*
+       * Handle elimination of particular gestures based on class attributes
+       */
+      if(!$("#"+target).hasClass("can-drag")) {
+        objectOffsetX = 0;
+        objectOffsetY = 0;
+      }
+
+      if(!$("#"+target).hasClass("can-scale")) {
+        scale = currentObject.originScale;
+      }
+
+      if(!$("#"+target).hasClass("can-rotate")) {
+        rotation = 0;
       }
 
       // Update collection values
@@ -242,7 +256,8 @@ var HuddleObject = (function() {
             deltaTop: currentObject.originTop + objectOffsetY,
             deltaLeft: currentObject.originLeft + objectOffsetX,
             deltaScale: currentObject.originScale * scale,
-            deltaRotate: currentObject.originRotate + rotation
+            deltaRotate: currentObject.originRotate + rotation,
+            noAction: !currentObject.noAction
         }
 
       });
@@ -256,7 +271,8 @@ var HuddleObject = (function() {
                 originTop: currentObject.deltaTop,
                 originLeft: currentObject.deltaLeft,
                 originScale: currentObject.deltaScale,
-                originRotate: currentObject.deltaRotate
+                originRotate: currentObject.deltaRotate,
+                noAction: !currentObject.noAction
             }
 
         });
@@ -282,49 +298,10 @@ var HuddleObject = (function() {
 
   }
 
-  function getTransformValues(target) {
-
-    //console.log("##### DEBUG TRANSFORM FUNCTION");
-
-    var el = document.getElementById(target);
-    var st = window.getComputedStyle(el, null);
-    var tr = st.getPropertyValue("-webkit-transform") ||
-             st.getPropertyValue("-moz-transform") ||
-             st.getPropertyValue("-ms-transform") ||
-             st.getPropertyValue("-o-transform") ||
-             st.getPropertyValue("transform") ||
-             "fail...";
-
-    // With rotate(30deg)...
-    // matrix(0.866025, 0.5, -0.5, 0.866025, 0px, 0px)
-    //console.log('Matrix: ' + tr);
-
-    // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
-
-    var values = tr.split('(')[1];
-        values = values.split(')')[0];
-        values = values.split(',');
-    var a = values[0];
-    var b = values[1];
-    var c = values[2];
-    var d = values[3];
-
-    var scale = Math.sqrt(a*a + b*b);
-
-    // arc sin, convert from radians to degrees, round
-    // DO NOT USE: see update below
-    var sin = b/scale;
-    var angle = Math.round(Math.asin(sin) * (180/Math.PI));
-
-    // works!
-    
-    //console.log('Rotate: ' + angle + 'deg');
-    //console.log('Scale: ' + scale);
-  }
-
   /*
    * Return API Functions
-   */ 
+   */
+
   return {
     initObjects : initObjects
   }
@@ -333,5 +310,4 @@ var HuddleObject = (function() {
 })();
 
 // Set HuddleObject to Global scope
-//console.log("adding to window")
 window.HuddleObject = HuddleObject;
