@@ -185,7 +185,7 @@ Points to consider:
 
 <b>Summary</b>
 
-Well done! A Huddle Object should now successfully be added to the canvas. Gestures are automatically enabled, so if you have a tablet device available feel free to try them out. See the next section for more information on gestures.
+Well done! A Huddle Object should now successfully be added to the canvas. Gestures are automatically disabled until the correct classed are applied. Apply them following the instructions in the section below anduse a tablet device available to try them out. See the next section for more information on gestures.
 
 ## Using HuddleObject - Gestures
 
@@ -193,17 +193,35 @@ Huddle Objects currently support the following multi-touch gestures using Hammer
 
 All transformations are applied through the objectTransform() function in the API.
 
+By default, all gestures are disabled, even after the `.huddle-objects` has been applied. Simply add the class attributes shown in the sections below for each gesture to enable them.
+
 <b>One finger drag</b>
 
 Dragging a Huddle Object with one finger will move it about the canvas.
+
+Enable class: `.can-drag`
 
 <b>Two finger pinch</b>
 
 Pinching the item will scale it based on the increase or decrease in proximity of the two pointers.
 
+Enable class: `.can-scale`
+
 <b>Two finger rotate</b>
 
 With two fingers, a Huddle Object can also be rotated.
+
+Enable class: `.can-rotate`
+
+<b>Summary</b>
+
+A HMTL div with all gestures enabled will therefore have class attributes similar to the following:
+
+```html
+<div id="test-object" class="huddle-object can-drag can-scale can-rotate">
+  <span>Hello world!</span>
+</div>
+```
 
 ## Using HuddleObject - Sessions
 
