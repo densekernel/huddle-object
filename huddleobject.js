@@ -1,3 +1,7 @@
+/*
+ * Use module design patttern for API
+ */
+
 var HuddleObject = (function() {
 
   /*
@@ -6,7 +10,6 @@ var HuddleObject = (function() {
 
   // Initialise ObjectPosition Meteor Collection
   var ObjectPosition;
-
   var objectCollectionLoaded = false;
   var objectPositionLoaded = false;
   var minScale = 0.7;
@@ -47,14 +50,10 @@ var HuddleObject = (function() {
        */
 
       if(ObjectPosition.find().count() != 0) {
-        //console.log("### ObjectPosition loaded");
-        //console.log(ObjectPosition.find().fetch());
         objectCollectionLoaded = true;
-        
       }
 
       if(objectCollectionLoaded === true && objectPositionLoaded === false) {
-        //console.log("EXECUTE IF STATEMENT");
         reloadObjects();
         objectPositionLoaded = true;
       }
@@ -65,15 +64,8 @@ var HuddleObject = (function() {
   // Setup event listeners for any element with class ".huddle-object"
   function setupEventListeners() {
 
-    //console.log(DDP._allSubscriptionsReady());
-
     var objectElements = document.getElementsByClassName("huddle-object");
     var objectEventListeners = [];
-
-    // Check if meteor collection has loaded
-    //console.log("### Object Position Collection");
-    //console.log(ObjectPosition.find().fetch());
-
 
     for (i = 0; i < objectElements.length; i++) {
 
@@ -85,9 +77,9 @@ var HuddleObject = (function() {
       objectEventListeners[i].on('panstart panmove panend pinchstart pinchmove pinchend', function(ev) {
 
         var target = ev.target.id;
+        // debug: print out target for Hammer JS event
         //console.log("### Hammer JS Event");
         //console.log("## Target Element " + target);
-        //console.log(ev);
           
         /*
          * Functions to manipulate objects
@@ -116,11 +108,7 @@ var HuddleObject = (function() {
     var objectWidth = parseInt($('#' + target).css('width'));
     var objectHeight = parseInt($('#' + target).css('height'));
 
-    ////console.log("# TOP: " + currentTop + " LEFT: " + currentLeft);
-
-
-
-    // Insert initial data into objectData object
+    // Insert initial data into objectData as object
     var objectData = {
       "id" : target,
       "originTop" : originTop,
@@ -137,6 +125,7 @@ var HuddleObject = (function() {
     // insert into ObjectPosition collection if not already there
     if(!ObjectPosition.findOne({'id' : target}) && target != "") {
       ObjectPosition.insert(objectData);
+      // debug: See which data is inserted for that object
       //console.log("## Object inserted!");
       //console.log(ObjectPosition.findOne({'id': target}));  
     }
@@ -144,17 +133,12 @@ var HuddleObject = (function() {
 
   // Reload objects using the most up-to-date data in ObjectPosition collection
   function reloadObjects() {
-    //console.log(ObjectPosition.find().fetch());
     var objectElements = document.getElementsByClassName("huddle-object");
 
     for(var i = 0; i < objectElements.length; i++) {
 
       var id = objectElements[i].id;
       var currentObject = ObjectPosition.findOne({'id' : id});
-      //console.log("### reloadObjects" + currentObject);
-      //console.log(currentObject);
-
-      //getTransformValues(id);
 
       if(currentObject) {
         $('#' + id).css('top', currentObject.originTop + 'px');
@@ -177,8 +161,6 @@ var HuddleObject = (function() {
 
       var id = objectElements[i].id;
       var currentObject = ObjectPosition.findOne({'id' : id});
-      //console.log("### updateObjects currentObject");
-      //console.log(currentObject);
 
       if(currentObject) {
         $('#' + id).css('top', currentObject.deltaTop);
@@ -194,13 +176,11 @@ var HuddleObject = (function() {
     }
   }
 
-  // Function to move object using two-finger drag gesture
+  // Function to transform objects
   function objectTransform(ev, target) {
 
-      //console.log("## Transform Gesture" + target);
-      //console.log(ev);
-
       // Check if collection requires insertion of target element
+      // See insertObject function()
       insertObject(target);
 
       // Pause background panning
@@ -221,10 +201,10 @@ var HuddleObject = (function() {
       var eventRotation = Math.round(ev.rotation);
       rotation = previousRotation;
 
-
+      // Select object from Meteor collection
       var currentObject = ObjectPosition.findOne({'id' : target});
 
-      // 180 flip bug fix
+      // fix for 180 degree flip bug
       if  ( (!(Math.abs(startRotation - eventRotation) > 10)) ||
             Math.abs(eventRotation) < 10 || 
             (!(Math.abs(Math.abs(startRotation) - Math.abs(eventRotation)) > 10))
@@ -234,9 +214,7 @@ var HuddleObject = (function() {
 
       }
 
-      /*
-       * Handle elimination of particular gestures based on class attributes
-       */
+      // Eliminate inapplicable gestures based on target elements class attributes
       if(!$("#"+target).hasClass("can-drag")) {
         objectOffsetX = 0;
         objectOffsetY = 0;
@@ -259,10 +237,9 @@ var HuddleObject = (function() {
             deltaRotate: currentObject.originRotate + rotation,
             noAction: !currentObject.noAction
         }
-
       });
 
-      // Finalise collection values
+      // Update collection values
       if (ev.type === 'panend' || ev.type === 'pinchend') {
         HuddleCanvas.debugWrite(ev.type);
 
@@ -305,7 +282,6 @@ var HuddleObject = (function() {
   return {
     initObjects : initObjects
   }
-
 
 })();
 
