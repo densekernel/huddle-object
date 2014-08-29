@@ -1,6 +1,6 @@
 Package.describe({
     summary: "HuddleObject - Add HTML div elements to HuddleCanvas with support for multi-touch gestures",
-    version: "0.3.1",
+    version: "0.3.2",
     name: "jay5:huddleobject",
     git: 'https://github.com/jonnymanf/HuddleObject.git'
 });

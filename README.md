@@ -82,7 +82,7 @@ Once this stage in the development is reached, the project should be runnable in
 
 Use the Meteor Package Manager to add the HuddleObject API to the Meteor project.
 
-`$ meteor add huddleobject`
+`$ meteor add jay5:huddleobject`
 
 Now, if all three of the required packages are included in the Meteor project, the shell window will return a confirmation message similar to below.
 
