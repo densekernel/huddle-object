@@ -213,6 +213,12 @@ With two fingers, a Huddle Object can also be rotated.
 
 Enable class: `.can-rotate`
 
+<b>Elastic</b>
+
+The shape will return to its original position, orientation and scale after temporary manipulation.
+
+Enable class: `.is-elastic`
+
 <b>Summary</b>
 
 A HMTL div with all gestures enabled will therefore have class attributes similar to the following:
