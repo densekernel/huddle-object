@@ -192,6 +192,7 @@ var HuddleObject = (function() {
 
       // Get data from Hammer JS event
       var currentAngle = -HuddleCanvas.getTotalRotation();
+      var currentScale = HuddleCanvas.getTotalScale();
       var angle = currentAngle * Math.PI / 180.0;
       var dx = ev.deltaX/currentScale;
       var dy = ev.deltaY/currentScale;
