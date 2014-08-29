@@ -240,7 +240,8 @@ var HuddleObject = (function() {
       });
 
       // Update collection values
-      if (ev.type === 'panend' || ev.type === 'pinchend') {
+      // Finalise collection values
+      if ((ev.type === 'panend' || ev.type === 'pinchend') && !($('#' + target).hasClass('is-elastic'))) {
         HuddleCanvas.debugWrite(ev.type);
 
         ObjectPosition.update(currentObject._id, {
@@ -253,6 +254,10 @@ var HuddleObject = (function() {
             }
 
         });
+      }
+
+      if((ev.type === 'panend' || ev.type === 'pinchend') && $('#' + target).hasClass('is-elastic')) {   
+        animateReset(target, currentObject);
       }
 
       // debug: console ObjectPosition update
@@ -273,6 +278,17 @@ var HuddleObject = (function() {
         $(element).css(browserPrefixes[z] + action, parameters);
     }
 
+  }
+
+  // function to animate an elastic elmement into origin position
+  function animateReset(target, currentObject) {
+
+    $('#' + target).animate({
+      top: currentObject.originTop,
+      left: currentObject.originLeft
+      }, {
+        duration: 300
+      });
   }
 
   /*
