@@ -192,12 +192,13 @@ var HuddleObject = (function() {
 
       // Get data from Hammer JS event
       var currentAngle = -HuddleCanvas.getTotalRotation();
+      var currentScale = HuddleCanvas.getTotalScale();
       var angle = currentAngle * Math.PI / 180.0;
-      var dx = ev.deltaX;
-      var dy = ev.deltaY;
+      var dx = ev.deltaX/currentScale;
+      var dy = ev.deltaY/currentScale;
       var objectOffsetX = (Math.cos(angle) * dx) - (Math.sin(angle) * dy);
       var objectOffsetY = (Math.sin(angle) * dx) + (Math.cos(angle) * dy);
-      var scale = (Math.round(ev.scale*10))/10;
+      var scale = (Math.round(ev.scale/currentScale*10))/10;
       var eventRotation = Math.round(ev.rotation);
       rotation = previousRotation;
 
