@@ -135,7 +135,7 @@ The HTML file needs to be updated to include the mark-up for the Huddle Object e
 
 <body>
 	<div id="huddle-canvas-container">
-		<div id="huddle-layer">
+		<div id="object-layer">
 			<div id="test-object" class="huddle-object">
 				<span>Hello world!</span>
 			</div>
@@ -144,7 +144,7 @@ The HTML file needs to be updated to include the mark-up for the Huddle Object e
 </body>
 ```
 
-To add an object we simply create a nested ```<div></div>``` element within ```<div id="huddle-layer"></div>```
+To add an object we simply create a nested ```<div></div>``` element within ```<div id="object-layer"></div>```
 
 Points to consider:
 
@@ -161,7 +161,7 @@ if (Meteor.isClient) {
     panningEnabled: true,
     backgroundImage: "../../map.jpg",
     showDebugBox: true,
-    layers: ["huddle-layer"]
+    layers: ["object-layer"]
   });
   
   // code for HuddleObject inside window.onload function
