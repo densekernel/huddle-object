@@ -41,6 +41,10 @@ If the HuddleCanvas documentation was followed correctly, the files will have be
 ```html
 <head>
   <title>HuddleDocumentation</title>
+  <!-- Insert below meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="painting demo">
+  <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
 
 <body>
@@ -236,5 +240,13 @@ When an object is first added to the canvas, it won't be added to the Meteor Col
 They can be defaulted to their CSS properties by running the following command in terminal:
 
 `$ meteor reset`
+
+## Example Gist
+
+The idea behind HuddleObject is to create an environment where an application can be created with its own scripts and logic, making use of the simplicity of the gestures. For demonstration purposes, see the following gist for an example involving a university map and nearby tube stations.
+
+https://gist.github.com/jonnymanf/92c08bdf4c593650905c
+
+Assets for the map and icon files, referenced in the CSS file, will need to be provided, simply include them within the directory `public` in the Meteor project's root.
 
 
