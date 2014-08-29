@@ -198,7 +198,7 @@ var HuddleObject = (function() {
       var dy = ev.deltaY/currentScale;
       var objectOffsetX = (Math.cos(angle) * dx) - (Math.sin(angle) * dy);
       var objectOffsetY = (Math.sin(angle) * dx) + (Math.cos(angle) * dy);
-      var scale = (Math.round(ev.scale/currentScale*10))/10;
+      var scale = (Math.round((ev.scale/currentScale)*10))/10;
       var eventRotation = Math.round(ev.rotation);
       rotation = previousRotation;
 
