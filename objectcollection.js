@@ -1,5 +1,5 @@
 var HuddleObjectCollection = (function() {
-    ObjectPosition = new Meteor.Collection('objectPosition');
+    ObjectPosition = new Mongo.Collection('objectPosition');
 
     var getObjectCollection = function() {
         return ObjectPosition;
@@ -16,7 +16,7 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
-	Meteor.publish('objectPosition', function() {
-		return ObjectPosition.find();
-	})
+    Meteor.publish('objectPosition', function() {
+        return ObjectPosition.find();
+    })
 }
