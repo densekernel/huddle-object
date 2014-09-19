@@ -17,12 +17,23 @@ var HuddleObject = (function() {
     var rotation;
     var previousRotation = 0;
 
+
+    var settings = {
+        friction: 0.05
+    }
+
     /*
      * API functions
      */
 
     // Initialise Huddle Objects
-    function initObjects() {
+    function initObjects(settingsObject) {
+
+        if (settingsObject) {
+            if (settingsObject.friction !== undefined) {
+                settings.friction = settingsObject.friction;
+            }
+        }
 
         // Get cursor to ObjectPosition meteor collection
         ObjectPosition = HuddleObjectCollection.getObjectCollection();
@@ -79,9 +90,6 @@ var HuddleObject = (function() {
             objectEventListeners[i].on('panstart panmove panend pinchstart pinchmove pinchend', function(ev) {
 
                 var target = ev.target.id;
-                // debug: print out target for Hammer JS event
-                //console.log("### Hammer JS Event");
-                //console.log("## Target Element " + target);
 
                 /*
                  * Functions to manipulate objects
@@ -91,9 +99,6 @@ var HuddleObject = (function() {
 
             });
 
-            // debug: console Hammer JS Event listener
-            //console.log("### HammerJS Event Listener");
-            //console.log(objectEventListeners[i]);
 
         }
 
@@ -129,9 +134,7 @@ var HuddleObject = (function() {
             'id': target
         }) && target != "") {
             ObjectPosition.insert(objectData);
-            // debug: See which data is inserted for that object
-            //console.log("## Object inserted!");
-            //console.log(ObjectPosition.findOne({'id': target}));  
+
         }
     }
 
@@ -184,9 +187,10 @@ var HuddleObject = (function() {
         }
     }
 
+    var prevEvent;
+
     // Function to transform objects
     function objectTransform(ev, target) {
-
         // Check if collection requires insertion of target element
         // See insertObject function()
         insertObject(target);
@@ -256,7 +260,6 @@ var HuddleObject = (function() {
         if ((ev.type === 'panend' || ev.type === 'pinchend') && !($('#' + target).hasClass('is-elastic'))) {
             //HuddleCanvas.debugWrite(ev.type);
 
-            console.log(ev.type);
             if (ev.type === 'panend') {
                 ObjectPosition.update(currentObject._id, {
                     $set: {
@@ -265,6 +268,10 @@ var HuddleObject = (function() {
                     }
 
                 });
+                if ($("#" + target).hasClass("can-flick")) {
+                    applyInertia(angle, prevEvent.velocityX, prevEvent.velocityY, currentObject, target);
+                }
+
 
             }
 
@@ -282,9 +289,35 @@ var HuddleObject = (function() {
             animateReset(target, currentObject);
         }
 
-        // debug: console ObjectPosition update
-        //console.log(ObjectPosition.find().fetch());
 
+        prevEvent = ev;
+    }
+
+    function applyInertia(angle, velocityXHammer, velocityYHammer, currentObject, target) {
+        var multiplier = 20;
+
+        velocityX = velocityXHammer * multiplier;
+        velocityY = velocityYHammer * multiplier;
+
+        var inertiaMovX = (Math.cos(angle) * velocityX) - (Math.sin(angle) * velocityY);
+        var inertiaMovY = (Math.sin(angle) * velocityX) + (Math.cos(angle) * velocityY);
+
+        ObjectPosition.update(currentObject._id, {
+            $inc: {
+                deltaTop: -inertiaMovY,
+                deltaLeft: -inertiaMovX,
+                originTop: -inertiaMovY,
+                originLeft: -inertiaMovX
+            }
+
+        });
+        if (!(inertiaMovX < 0.01 && inertiaMovY < 0.01)) {
+            setTimeout(function() {
+                applyInertia(angle, velocityXHammer / (1 + settings.friction), velocityYHammer / (1 + settings.friction), currentObject, target)
+            }, 1);
+        } else {
+            return;
+        }
     }
 
     // Function to apply webkit to all browsers 
