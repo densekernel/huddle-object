@@ -205,6 +205,20 @@ Dragging a Huddle Object with one finger will move it about the canvas.
 
 Enable class: `.can-drag`
 
+<b>One finger flick</b>
+
+Gives Huddle Object inertia, allowing you to flick it across the canvas.
+
+Enable class: `.can-flick`
+
+You can change the friction of the canvas when initialising the objects, the default value if a value is not given is 0.05:
+
+```javascript
+HuddleObject.initObjects({
+    friction: 0.03
+});
+```
+
 <b>Two finger pinch</b>
 
 Pinching the item will scale it based on the increase or decrease in proximity of the two pointers.
