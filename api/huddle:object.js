@@ -1,8 +1,7 @@
 /*
  * Use module design patttern for API
  */
-
-var HuddleObject = (function() {
+HuddleObject = (function() {
 
     /*
      * API variables
@@ -16,7 +15,6 @@ var HuddleObject = (function() {
     var startRotation = 0;
     var rotation;
     var previousRotation = 0;
-
 
     var settings = {
         friction: 0.05
@@ -42,11 +40,10 @@ var HuddleObject = (function() {
         setupEventListeners();
 
         /*
-         * Deps.autorun code block
+         * Tracker.autorun code block
          */
-
-        Deps.autorun(function() {
-
+        Tracker.autorun(function() {
+          
             /*
              * Every iteration
              */
@@ -320,7 +317,7 @@ var HuddleObject = (function() {
         }
     }
 
-    // Function to apply webkit to all browsers 
+    // Function to apply webkit to all browsers
     function applyAllBrowsers(element, action, parameters) {
         var browserPrefixes = [
             "-o-",
@@ -355,6 +352,3 @@ var HuddleObject = (function() {
     }
 
 })();
-
-// Set HuddleObject to Global scope
-window.HuddleObject = HuddleObject;

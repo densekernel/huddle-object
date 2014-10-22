@@ -1,4 +1,4 @@
-HuddleObject API
+Huddle Object API
 ============
 
 HuddleObject: An API to allow the easy inclusion of HTML objects on a HuddleCanvas with support for HammerJS multi-touch gestures.
@@ -12,38 +12,36 @@ To begin, follow the instructions outlined in the [HuddleCanvas API](https://git
 This will cover:
 
 1. Installing [Meteor](https://www.meteor.com/)
-2. Installing Meteor's Package Manager [Meteorite](http://oortcloud.github.io/meteorite/)
-3. Creating a Meteor project
-4. Adding Huddle API
-5. Adding HuddleCanvas API
-6. Using HuddleCanvas
+2. Creating a Meteor project
+3. Adding HuddleCanvas API
+4. Using HuddleCanvas
 
-<b>n.b.</b> Although this is a six-step process, steps 1. and 2. are only required for first time users of Meteor and Meteorite. The remainder of the instructions can be completed rapidly, primarily using command line prompts and basic HTML/CSS/JS.
+<b>n.b.</b> Although this is a four-step process, step 1. is only required for first time users of Meteor. The remainder of the instructions can be completed rapidly, primarily using command line prompts and basic HTML/CSS/JS.
 
 Once the above steps from the HuddleCanvas documentation have been completed, the HuddleObject API can be integrated with the Meteor Project.
 
 ## Using HuddleObject - The Basics
 
-This section explains the basics of HuddleObject. To demonstrate integration from a clean install, the HuddleCanvas instructions were followed in a new project called "HuddleDocumentation".
+This section explains the basics of HuddleObject. To demonstrate integration from a clean install, the HuddleCanvas instructions were followed in a new project called "HuddleObjectDemo".
 
 When using the Huddle API's, the main development area consists of three generated files in the root directory of the new Meteor project.
 
-Given the example project title "HuddleDocumentation", the above mentioned files should be generated as:
+Given the example project title "HuddleObjectDemo", the above mentioned files should be generated as:
 
-- "HuddleDocumentation.css"
-- "HuddleDocumentation.html"
-- "HuddleDocumentation.js"
+- "HuddleObjectDemo.css"
+- "HuddleObjectDemo.html"
+- "HuddleObjectDemo.js"
 
-If the HuddleCanvas documentation was followed correctly, the files will have been edited to have content similar to the following examples. 
+If the HuddleCanvas documentation was followed correctly, the files will have been edited to have content similar to the following examples.
 
-<b>HuddleDocumentation.html</b>
+<b>HuddleObjectDemo.html</b>
 
 ```html
 <head>
-  <title>HuddleDocumentation</title>
+  <title>Huddle Object Demo</title>
   <!-- Insert below meta tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="painting demo">
+  <meta name="apple-mobile-web-app-title" content="Huddle Object Demo">
   <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
 
@@ -55,11 +53,11 @@ If the HuddleCanvas documentation was followed correctly, the files will have be
 </body>
 ```
 
-<b>HuddleDocumentation.js</b>
+<b>HuddleObjectDemo.js</b>
 
 ```javascript
 if (Meteor.isClient) {
-  var canvas = HuddleCanvas.create("huddle-orbiter.proxemicinteractions.org", 60000, "HuddleDocumentation", {
+  var canvas = HuddleCanvas.create("orbiter.huddlelamp.org", 60000, {
     panningEnabled: true,
     backgroundImage: "../../map.jpg",
     showDebugBox: true,
@@ -74,7 +72,7 @@ if (Meteor.isServer) {
 }
 ```
 
-The parameters passed into the HuddleCanvas.create() function may vary slightly, in the example it is connected to the [HuddleOrbiter](http://huddle-orbiter.proxemicinteractions.org:3000/) simulator and settings have been enabled with a background image assigned. 
+The parameters passed into the HuddleCanvas.create() function may vary slightly, in the example it is connected to the [HuddleOrbiter](http://orbiter.huddlelamp.org) simulator and settings have been enabled with a background image assigned.
 
 <b>n.b.</b> A small note to those implementing a HuddleCanvas with a background image: The "backgroundImage" setting may need to be prefixed with "../../", this will access images placed in a folder within your meteor project called "public". This folder may need creating.
 
@@ -86,26 +84,13 @@ Once this stage in the development is reached, the project should be runnable in
 
 Use the Meteor Package Manager to add the HuddleObject API to the Meteor project.
 
-`$ meteor add jay5:huddleobject`
-
-Now, if all three of the required packages are included in the Meteor project, the shell window will return a confirmation message similar to below.
-
-`✓ huddle`<br>
-`    tag: https://github.com/raedle/meteor-huddle.git#v0.9.3-7`<br>
-`✓ huddlecanvas`<br>
-`    tag: https://github.com/scarrobin/HuddleCanvas.git#v0.6.3`<br>
-`✓ huddleobject`<br>
-`    tag: https://github.com/jonnymanf/HuddleObject.git#v0.1.2`<br>
-
-<b>n.b.</b> Version numbers of packages correct at time of writing.
+`$ meteor add huddle:object`
 
 Adding objects to the canvas is no different to adding HTML div elements to a webpage and styling them with CSS.
 
-<b>HuddleDocumentation.css</b>
+<b>HuddleObjectDemo.css</b>
 
 The CSS file needs to be updated with some <b>mandatory</b> and optional styles for any element we intend to add to the canvas.
-
-
 
 ```css
 /* CSS declarations go here */
@@ -128,13 +113,13 @@ Some points to consider:
 - <b>left</b> A default left property must be defined, 0px is fine.
 - The rest of the CSS styles are optional!
 
-<b>HuddleDocumentation.html</b>
+<b>HuddleObjectDemo.html</b>
 
 The HTML file needs to be updated to include the mark-up for the Huddle Object element.
 
 ```html
 <head>
-  <title>HuddleDocumentation</title>
+  <title>HuddleObjectDemo</title>
 </head>
 
 <body>
@@ -155,19 +140,19 @@ Points to consider:
 - <b>ID attribute</b> All parent elements need to be given a unique ID attribute
 - <b>Class attribute</b> All parent elements need to be given the "huddle-object" class attribute
 
-<b>HuddleDocumentation.js</b>
+<b>HuddleObjectDemo.js</b>
 
 Finally, we need to update the JavaScript file to include a call to the HuddleObject API function which initialises the Huddle Objects.
 
 ```javascript
 if (Meteor.isClient) {
-  var canvas = HuddleCanvas.create("huddle-orbiter.proxemicinteractions.org", 60000, "HuddleDocumentation", {
+  var canvas = HuddleCanvas.create("orbiter.huddlelamp.org", 60000, {
     panningEnabled: true,
     backgroundImage: "../../map.jpg",
     showDebugBox: true,
     layers: ["object-layer"]
   });
-  
+
   // code for HuddleObject inside window.onload function
   window.onload = function() {
     HuddleObject.initObjects();
@@ -181,7 +166,7 @@ if (Meteor.isServer) {
 }
 ```
 
-The initObjects() call initialises a Meteor Collection to store information about Huddle Objects and sets up the HammerJS event listeners. Following this, a Deps.autorun() function is implemented that will automatically update Huddle Object's positions based on the transformations applied. This is synchronised across all the devices within the Huddle.
+The initObjects() call initialises a Meteor Collection to store information about Huddle Objects and sets up the HammerJS event listeners. Following this, a Tracker.autorun() function is implemented that will automatically update Huddle Object's positions based on the transformations applied. This is synchronised across all the devices within the Huddle.
 
 Points to consider:
 
@@ -189,7 +174,7 @@ Points to consider:
 
 <b>Summary</b>
 
-Well done! A Huddle Object should now successfully be added to the canvas. Gestures are automatically disabled until the correct classed are applied. Apply them following the instructions in the section below anduse a tablet device available to try them out. See the next section for more information on gestures.
+Well done! A Huddle Object should now successfully be added to the canvas. Gestures are automatically disabled until the correct classes are applied. Apply them following the instructions in the section below anduse a tablet device available to try them out. See the next section for more information on gestures.
 
 ## Using HuddleObject - Gestures
 
@@ -262,5 +247,3 @@ The idea behind HuddleObject is to create an environment where an application ca
 https://gist.github.com/jonnymanf/92c08bdf4c593650905c
 
 Assets for the map and icon files, referenced in the CSS file, will need to be provided, simply include them within the directory `public` in the Meteor project's root.
-
-
