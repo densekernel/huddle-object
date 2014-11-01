@@ -125,7 +125,7 @@ The HTML file needs to be updated to include the mark-up for the Huddle Object e
 <body>
 	<div id="huddle-canvas-container">
 		<div id="object-layer">
-			<div id="test-object" class="huddle-object">
+			<div id="test-object" class="huddle-object can-drag can-scale can-rotate">
 				<span>Hello world!</span>
 			</div>
 		</div>

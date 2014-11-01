@@ -22,4 +22,22 @@ if (Meteor.isServer) {
   Meteor.publish('huddle-object-position', function() {
     return ObjectPosition.find();
   });
+
+  ObjectPosition.allow({
+    insert: function (userId, post) {
+      return true;
+    },
+    update: function(userId, document, fieldNames, modifier) {
+      return true;
+    },
+    remove: function (userId, post) {
+      return true;
+    }
+  });
 }
+
+// Meteor.methods({
+//   updateObject: function() {
+//
+//   },
+// });
